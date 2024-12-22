@@ -17,7 +17,9 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Loader2, LogIn } from 'lucide-react'
 
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -29,13 +31,20 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
   })
+  const [loading, setLoading] = useState(false)
+
+  const onSubmit = async (data: TLogin) => {
+    setLoading(true)
+    await login(data)
+    setLoading(false)
+  }
 
   return (
     <div className='flex justify-center items-center w-full h-screen'>
       <Form {...form}>
         <form
           className='w-full max-w-[400px]'
-          onSubmit={form.handleSubmit(login)}
+          onSubmit={form.handleSubmit(onSubmit)}
         >
           <Card>
             <CardHeader>
@@ -65,7 +74,13 @@ const Login = () => {
               />
             </CardContent>
             <CardFooter>
-              <Button type='submit'>Login</Button>
+              <Button
+                type='submit'
+                disabled={loading}
+              >
+                Login{' '}
+                {loading ? <Loader2 className='animate-spin' /> : <LogIn />}
+              </Button>
             </CardFooter>
           </Card>
         </form>
