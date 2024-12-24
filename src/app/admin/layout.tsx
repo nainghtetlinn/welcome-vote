@@ -2,7 +2,7 @@ import Header from './_components/header'
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <main>
+    <main className='container mx-auto max-w-screen-lg'>
       <Header />
       {children}
     </main>
