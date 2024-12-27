@@ -1,10 +1,10 @@
 import { z } from 'zod'
 
 export const candidateSchema = z.object({
-  name: z.string(),
-  roll_no: z.string(),
+  name: z.string().min(1, 'Name required.'),
+  roll_no: z.string().min(1, 'Roll no. required.'),
   bio: z.string().optional(),
-  photo_url: z.string(),
+  photo: z.instanceof(File),
 })
 
 export type TCandidate = z.infer<typeof candidateSchema>
