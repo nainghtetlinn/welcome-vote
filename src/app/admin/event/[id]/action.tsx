@@ -53,3 +53,21 @@ export async function createNewCandidate(e: TCandidate & { event_id: number }) {
     .update({ photo_url: urlResult.data.publicUrl })
     .eq('id', candidateResult.data.id)
 }
+
+export const toggleActive = async ({
+  status,
+  id,
+}: {
+  status: boolean
+  id: number
+}) => {
+  const supabase = await createClient()
+
+  const { error } = await supabase
+    .from('events')
+    .update({ status: !status })
+    .eq('id', id)
+    .select()
+
+  if (error) throw new Error(error.message)
+}

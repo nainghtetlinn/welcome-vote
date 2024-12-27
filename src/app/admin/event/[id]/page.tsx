@@ -6,6 +6,7 @@ import AddNewCandidate from './_components/add-new-candidate'
 
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
+import Header from './_components/header'
 
 const EventDetails = async ({
   params,
@@ -15,26 +16,23 @@ const EventDetails = async ({
   const { id } = await params
 
   const supabase = await createClient()
-  const { data } = await supabase
+  const eventResult = await supabase
     .from('events')
     .select('*')
     .eq('id', id)
-    .limit(1)
     .single()
 
-  if (!data) redirect('/admin')
+  if (!eventResult.data) redirect('/admin')
+
+  const candidateResult = await supabase.from('candidates').select('*')
 
   return (
     <div className='p-4'>
-      <header className='flex items-center justify-center gap-4 mb-8'>
-        <h2 className='text-2xl font-bold underline'>{data.title}</h2>
-        {data.status ? (
-          <Badge>Active</Badge>
-        ) : (
-          <Badge variant='secondary'>Inactive</Badge>
-        )}
-        <Switch checked={data.status} />
-      </header>
+      <Header
+        id={eventResult.data.id}
+        title={eventResult.data.title}
+        status={eventResult.data.status}
+      />
 
       <section className='max-w-[400] mx-auto flex items-center justify-evenly mb-8'>
         <Profile name='King' />
@@ -45,51 +43,13 @@ const EventDetails = async ({
 
       <h3 className='font-bold text-lg mb-4'>Candidates</h3>
       <section className='flex flex-wrap gap-2 mb-8'>
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
-        <Profile name='King' />
+        {candidateResult.data?.map(c => (
+          <Profile
+            name={c.roll_no}
+            src={c.photo_url!}
+            key={c.id}
+          />
+        ))}
         <AddNewCandidate />
       </section>
 
