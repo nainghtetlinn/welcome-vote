@@ -7,35 +7,11 @@ export type Json =
   | Json[]
 
 export type Database = {
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          operationName?: string
-          query?: string
-          variables?: Json
-          extensions?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       candidates: {
         Row: {
+          bio: string | null
           created_at: string
           event_id: string
           gender: Database["public"]["Enums"]["gender"]
@@ -45,6 +21,7 @@ export type Database = {
           roll_no: number
         }
         Insert: {
+          bio?: string | null
           created_at?: string
           event_id: string
           gender?: Database["public"]["Enums"]["gender"]
@@ -54,6 +31,7 @@ export type Database = {
           roll_no: number
         }
         Update: {
+          bio?: string | null
           created_at?: string
           event_id?: string
           gender?: Database["public"]["Enums"]["gender"]
@@ -117,21 +95,24 @@ export type Database = {
           category_id: number
           created_at: string
           event_id: string
-          id: number
+          id: string
+          session_token: string
         }
         Insert: {
           candidate_id: string
           category_id: number
           created_at?: string
           event_id: string
-          id?: number
+          id?: string
+          session_token?: string
         }
         Update: {
           candidate_id?: string
           category_id?: number
           created_at?: string
           event_id?: string
-          id?: number
+          id?: string
+          session_token?: string
         }
         Relationships: [
           {
@@ -162,7 +143,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      fetch_events_with_counts: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          name: string
+          active: boolean
+          duration_in_min: number
+          created_at: string
+          candidates_count: number
+          votes_count: number
+        }[]
+      }
     }
     Enums: {
       gender: "male" | "female"

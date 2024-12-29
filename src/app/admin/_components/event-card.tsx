@@ -1,32 +1,36 @@
+import Profile from '@/components/profile'
+import { Badge } from '@/components/ui/badge'
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardContent,
-  CardFooter,
 } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 
+import { Tables } from '@/types/supabase'
 import Link from 'next/link'
-import Profile from '@/components/profile'
 
-const Event = ({
+const EventCard = ({
   event,
 }: {
-  event: { created_at: string; id: number; status: boolean; title: string }
+  event: Tables<'events'> & { candidates_count: number; votes_count: number }
 }) => {
   return (
     <Link href={`/admin/event/${event.id}`}>
       <Card className='hover:border-primary'>
         <CardHeader>
           <CardTitle className='flex items-center justify-between'>
-            <span>{event.title}</span>{' '}
-            {event.status ? (
+            <span>{event.name}</span>
+            {event.active ? (
               <Badge>Active</Badge>
             ) : (
               <Badge variant='secondary'>Inactive</Badge>
             )}
           </CardTitle>
+          <CardDescription>
+            {event.candidates_count} candidates | {event.votes_count} voters
+          </CardDescription>
         </CardHeader>
         <CardContent className='flex items-center justify-evenly'>
           <Profile name='King' />
@@ -39,4 +43,4 @@ const Event = ({
   )
 }
 
-export default Event
+export default EventCard

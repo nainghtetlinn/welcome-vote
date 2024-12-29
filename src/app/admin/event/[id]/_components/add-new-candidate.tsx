@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Loader2, Plus } from 'lucide-react'
 import Image from 'next/image'
 
@@ -41,13 +42,19 @@ const AddNewCandidate = () => {
 
   const form = useForm<TCandidate>({
     resolver: zodResolver(candidateSchema),
-    defaultValues: { name: '', roll_no: '', bio: '', photo: undefined },
+    defaultValues: {
+      name: '',
+      roll_no: 0,
+      bio: '',
+      gender: 'male',
+      photo: undefined,
+    },
   })
 
   const onSubmit = async (data: TCandidate) => {
     setLoading(true)
     try {
-      await createNewCandidate({ ...data, event_id: parseInt(params.id) })
+      await createNewCandidate({ ...data, event_id: params.id })
       toast.success('Success')
       setOpen(false)
       form.reset()
@@ -143,6 +150,39 @@ const AddNewCandidate = () => {
               />
             )}
           />
+
+          <FormField
+            control={form.control}
+            name='gender'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Gender</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className='flex flex-col space-y-1'
+                  >
+                    <div className='flex items-center space-x-2'>
+                      <RadioGroupItem
+                        value='male'
+                        id='m'
+                      />
+                      <Label htmlFor='m'>Male</Label>
+                    </div>
+                    <div className='flex items-center space-x-2'>
+                      <RadioGroupItem
+                        value='female'
+                        id='f'
+                      />
+                      <Label htmlFor='f'>Female</Label>
+                    </div>
+                  </RadioGroup>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name='bio'

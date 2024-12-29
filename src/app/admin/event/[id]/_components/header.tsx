@@ -12,7 +12,7 @@ const Header = ({
   title,
   status,
 }: {
-  id: number
+  id: string
   title: string
   status: boolean
 }) => {

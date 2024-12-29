@@ -1,12 +1,11 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 
 import { createClient } from '@/utils/supabase/server'
 import { candidateSchema, TCandidate } from '@/types/candidate'
 
-export async function createNewCandidate(e: TCandidate & { event_id: number }) {
+export async function createNewCandidate(e: TCandidate & { event_id: string }) {
   const { success, data } = candidateSchema.safeParse(e)
 
   if (!success) throw new Error('Invalid inputs.')
@@ -15,7 +14,7 @@ export async function createNewCandidate(e: TCandidate & { event_id: number }) {
 
   const eventResult = await supabase
     .from('events')
-    .select('id, title')
+    .select('id, name')
     .eq('id', e.event_id)
     .single()
 
@@ -29,6 +28,7 @@ export async function createNewCandidate(e: TCandidate & { event_id: number }) {
       name: data.name,
       roll_no: data.roll_no,
       bio: data.bio,
+      gender: data.gender,
     })
     .select()
     .single()
@@ -38,7 +38,7 @@ export async function createNewCandidate(e: TCandidate & { event_id: number }) {
   const photoResult = await supabase.storage
     .from('profile_pictures')
     .upload(
-      `${eventResult.data.title}/${candidateResult.data.roll_no}_${candidateResult.data.name}`,
+      `${eventResult.data.name}/${candidateResult.data.roll_no}_${candidateResult.data.name}`,
       data.photo
     )
 
@@ -52,6 +52,8 @@ export async function createNewCandidate(e: TCandidate & { event_id: number }) {
     .from('candidates')
     .update({ photo_url: urlResult.data.publicUrl })
     .eq('id', candidateResult.data.id)
+
+  revalidatePath('/admin/event/:id')
 }
 
 export const toggleActive = async ({
@@ -59,15 +61,17 @@ export const toggleActive = async ({
   id,
 }: {
   status: boolean
-  id: number
+  id: string
 }) => {
   const supabase = await createClient()
 
   const { error } = await supabase
     .from('events')
-    .update({ status: !status })
+    .update({ active: !status })
     .eq('id', id)
     .select()
 
   if (error) throw new Error(error.message)
+
+  revalidatePath('/admin/event/:id')
 }

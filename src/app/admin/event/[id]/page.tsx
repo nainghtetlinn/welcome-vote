@@ -1,5 +1,3 @@
-import { Badge } from '@/components/ui/badge'
-import { Switch } from '@/components/ui/switch'
 import Profile from '@/components/profile'
 import ResultChart from './_components/result-chart'
 import AddNewCandidate from './_components/add-new-candidate'
@@ -16,22 +14,22 @@ const EventDetails = async ({
   const { id } = await params
 
   const supabase = await createClient()
-  const eventResult = await supabase
-    .from('events')
-    .select('*')
-    .eq('id', id)
-    .single()
 
-  if (!eventResult.data) redirect('/admin')
+  const events = await supabase.from('events').select().eq('id', id).single()
 
-  const candidateResult = await supabase.from('candidates').select('*')
+  if (!events.data) redirect('/admin')
+
+  const candidates = await supabase
+    .from('candidates')
+    .select()
+    .eq('event_id', id)
 
   return (
     <div className='p-4'>
       <Header
-        id={eventResult.data.id}
-        title={eventResult.data.title}
-        status={eventResult.data.status}
+        id={events.data.id}
+        title={events.data.name}
+        status={events.data.active}
       />
 
       <section className='max-w-[400] mx-auto flex items-center justify-evenly mb-8'>
@@ -43,9 +41,9 @@ const EventDetails = async ({
 
       <h3 className='font-bold text-lg mb-4'>Candidates</h3>
       <section className='flex flex-wrap gap-2 mb-8'>
-        {candidateResult.data?.map(c => (
+        {candidates.data?.map(c => (
           <Profile
-            name={c.roll_no}
+            name={c.name}
             src={c.photo_url!}
             key={c.id}
           />
