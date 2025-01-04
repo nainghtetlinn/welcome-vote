@@ -18,7 +18,7 @@ export type Database = {
           id: string
           name: string
           photo_url: string | null
-          roll_no: number
+          roll_no: string
         }
         Insert: {
           bio?: string | null
@@ -28,7 +28,7 @@ export type Database = {
           id?: string
           name: string
           photo_url?: string | null
-          roll_no: number
+          roll_no: string
         }
         Update: {
           bio?: string | null
@@ -38,7 +38,7 @@ export type Database = {
           id?: string
           name?: string
           photo_url?: string | null
-          roll_no?: number
+          roll_no?: string
         }
         Relationships: [
           {
@@ -46,6 +46,13 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidates_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_with_counts"
             referencedColumns: ["id"]
           },
         ]
@@ -136,11 +143,29 @@ export type Database = {
             referencedRelation: "events"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "votes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_with_counts"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      events_with_counts: {
+        Row: {
+          active: boolean | null
+          candidates_count: number | null
+          created_at: string | null
+          duration_in_min: number | null
+          id: string | null
+          name: string | null
+          votes_count: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       fetch_events_with_counts: {
