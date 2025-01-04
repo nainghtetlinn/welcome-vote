@@ -11,11 +11,7 @@ import {
 import { Tables } from '@/types/supabase'
 import Link from 'next/link'
 
-const EventCard = ({
-  event,
-}: {
-  event: Tables<'events'> & { candidates_count: number; votes_count: number }
-}) => {
+const EventCard = ({ event }: { event: Tables<'events_with_counts'> }) => {
   return (
     <Link href={`/admin/event/${event.id}`}>
       <Card className='hover:border-primary'>
