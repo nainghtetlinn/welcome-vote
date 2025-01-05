@@ -3,13 +3,13 @@ import { updateSession } from '@/utils/supabase/middleware'
 import { updateCookies } from '@/utils/cookie'
 
 export async function middleware(request: NextRequest) {
-  const supabaseResponse = await updateSession(request)
   const myNewResponse = await updateCookies(request)
+  const supabaseResponse = await updateSession(request)
 
-  const supabaseCookies = supabaseResponse.headers.get('Set-Cookie')
-  if (supabaseCookies) {
-    myNewResponse.headers.append('Set-Cookie', supabaseCookies)
+  const myCookies = myNewResponse.headers.get('Set-Cookie')
+  if (myCookies) {
+    supabaseResponse.headers.append('Set-Cookie', myCookies)
   }
 
-  return myNewResponse
+  return supabaseResponse
 }
