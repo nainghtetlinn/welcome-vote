@@ -44,7 +44,7 @@ const AddNewCandidate = () => {
     resolver: zodResolver(candidateSchema),
     defaultValues: {
       name: '',
-      roll_no: 0,
+      roll_no: '',
       bio: '',
       gender: 'male',
       photo: undefined,
