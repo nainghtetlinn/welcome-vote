@@ -8,29 +8,127 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { X } from 'lucide-react'
 
 import { useVoteContext } from '@/providers/vote-provider'
+import { motion, useScroll, useTransform } from 'motion/react'
+import { useRef } from 'react'
 import { Tables } from '@/types/supabase'
 
 const MyVotes = () => {
+  const containerRef = useRef(null)
   const { votes } = useVoteContext()
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['0.6 start', 'end start'],
+  })
+
+  const dropPosition = useTransform(scrollYProgress, [0, 1], [-100, 0])
+  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1])
 
   return (
-    <div className='grid grid-cols-2 sm:grid-cols-4 gap-2'>
-      <MyVote
-        title='King'
-        candidate={votes.king}
-      />
-      <MyVote
-        title='Queen'
-        candidate={votes.queen}
-      />
-      <MyVote
-        title='Prince'
-        candidate={votes.prince}
-      />
-      <MyVote
-        title='Princess'
-        candidate={votes.princess}
-      />
+    <div>
+      <motion.div
+        style={{
+          top: dropPosition,
+          opacity,
+          transition: 'opacity 0.3s ease, top 0.3s ease',
+        }}
+        className='fixed left-0 right-0 z-50 p-4 bg-card text-card-foreground shadow-md'
+      >
+        <div className='flex gap-4'>
+          <MyVoteMini
+            title='King'
+            candidate={votes.king}
+          />
+          <MyVoteMini
+            title='Queen'
+            candidate={votes.queen}
+          />
+          <MyVoteMini
+            title='Prince'
+            candidate={votes.prince}
+          />
+          <MyVoteMini
+            title='Princess'
+            candidate={votes.princess}
+          />
+        </div>
+      </motion.div>
+      <div
+        ref={containerRef}
+        className='grid grid-cols-2 sm:grid-cols-4 gap-2'
+      >
+        <MyVote
+          title='King'
+          candidate={votes.king}
+        />
+        <MyVote
+          title='Queen'
+          candidate={votes.queen}
+        />
+        <MyVote
+          title='Prince'
+          candidate={votes.prince}
+        />
+        <MyVote
+          title='Princess'
+          candidate={votes.princess}
+        />
+      </div>
+    </div>
+  )
+}
+
+const MyVoteMini = ({
+  title,
+  candidate,
+}: {
+  title: string
+  candidate: Tables<'candidates'> | null
+}) => {
+  const { updateVote } = useVoteContext()
+
+  const handleClick = () => {
+    updateVote(title.toLowerCase(), null)
+  }
+
+  if (!candidate)
+    return (
+      <div className='relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border'>
+        <Image
+          src={ProfileImage}
+          alt={title}
+          width={40}
+          height={40}
+          className='w-full h-full'
+        />
+      </div>
+    )
+
+  return (
+    <div className='relative'>
+      <Button
+        variant='destructive'
+        size='icon'
+        className='absolute -top-1 -right-1 z-10 w-4 h-4 rounded-full'
+        onClick={handleClick}
+      >
+        <X />
+      </Button>
+      {candidate.photo_url ? (
+        <Avatar>
+          <AvatarImage src={candidate.photo_url} />
+          <AvatarFallback>{candidate.name[0]}</AvatarFallback>
+        </Avatar>
+      ) : (
+        <div className='relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border'>
+          <Image
+            src={ProfileImage}
+            alt={title}
+            width={40}
+            height={40}
+            className='w-full h-full'
+          />
+        </div>
+      )}
     </div>
   )
 }
