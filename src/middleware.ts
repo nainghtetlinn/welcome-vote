@@ -1,10 +1,15 @@
-import { type NextRequest } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/utils/supabase/middleware'
+import { updateCookies } from '@/utils/cookie'
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request)
-}
+  const supabaseResponse = await updateSession(request)
+  const myNewResponse = await updateCookies(request)
 
-export const config = {
-  matcher: ['/admin'],
+  const supabaseCookies = supabaseResponse.headers.get('Set-Cookie')
+  if (supabaseCookies) {
+    myNewResponse.headers.append('Set-Cookie', supabaseCookies)
+  }
+
+  return myNewResponse
 }
