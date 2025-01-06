@@ -1,10 +1,13 @@
 import Profile from '@/components/profile'
-import ResultChart from './_components/result-chart'
 import AddNewCandidate from './_components/add-new-candidate'
-
-import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
 import Header from './_components/header'
+import ResultChart from './_components/result-chart'
+
+import { Tables } from '@/types/supabase'
+import { createClient } from '@/utils/supabase/server'
+import { redirect } from 'next/navigation'
+
+type TResult = Tables<'voting_results'>
 
 const EventDetails = async ({
   params,
@@ -17,12 +20,35 @@ const EventDetails = async ({
 
   const events = await supabase.from('events').select().eq('id', id).single()
 
-  if (!events.data) redirect('/admin')
-
   const candidates = await supabase
     .from('candidates')
     .select()
     .eq('event_id', id)
+
+  const votingResults = await supabase
+    .from('voting_results')
+    .select()
+    .eq('event_id', id)
+
+  if (!events.data || !candidates.data || !votingResults.data)
+    redirect('/admin')
+
+  const grouped = votingResults.data.reduce<{
+    king: TResult[]
+    queen: TResult[]
+    prince: TResult[]
+    princess: TResult[]
+  }>(
+    (g, c) => {
+      if (c.category_id == 1) g.king.push(c)
+      else if (c.category_id == 2) g.queen.push(c)
+      else if (c.category_id == 3) g.prince.push(c)
+      else if (c.category_id == 4) g.princess.push(c)
+
+      return g
+    },
+    { king: [], queen: [], prince: [], princess: [] }
+  )
 
   return (
     <div className='p-4'>
@@ -31,13 +57,6 @@ const EventDetails = async ({
         title={events.data.name}
         status={events.data.active}
       />
-
-      <section className='max-w-[400] mx-auto flex items-center justify-evenly mb-8'>
-        <Profile name='King' />
-        <Profile name='Queen' />
-        <Profile name='Prince' />
-        <Profile name='Princess' />
-      </section>
 
       <h3 className='font-bold text-lg mb-4'>Candidates</h3>
       <section className='flex flex-wrap gap-2 mb-8'>
@@ -53,10 +72,22 @@ const EventDetails = async ({
 
       <h3 className='font-bold text-lg mb-4'>Result Chart</h3>
       <section className='grid grid-cols-1 md:grid-cols-2 gap-2'>
-        <ResultChart />
-        <ResultChart />
-        <ResultChart />
-        <ResultChart />
+        <ResultChart
+          title='King'
+          candidates={grouped.king}
+        />
+        <ResultChart
+          title='Queen'
+          candidates={grouped.queen}
+        />
+        <ResultChart
+          title='Prince'
+          candidates={grouped.prince}
+        />
+        <ResultChart
+          title='Princess'
+          candidates={grouped.princess}
+        />
       </section>
     </div>
   )

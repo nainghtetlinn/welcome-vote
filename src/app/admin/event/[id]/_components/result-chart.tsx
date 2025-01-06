@@ -1,108 +1,91 @@
 'use client'
 
-import { TrendingUp } from 'lucide-react'
 import { Bar, BarChart, XAxis, YAxis } from 'recharts'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-const chartData = [
-  { browser: 'chrome', visitors: 275, fill: 'var(--color-chrome)' },
-  { browser: 'safari', visitors: 200, fill: 'var(--color-safari)' },
-  { browser: 'firefox', visitors: 187, fill: 'var(--color-firefox)' },
-  { browser: 'edge', visitors: 173, fill: 'var(--color-edge)' },
-  { browser: 'other', visitors: 90, fill: 'var(--color-other)' },
-]
+
+import { Tables } from '@/types/supabase'
+
+type TResult = Tables<'voting_results'>
 
 const chartConfig = {
-  visitors: {
-    label: 'Visitors',
-  },
-  chrome: {
-    label: 'Chrome',
+  first: {
     color: 'hsl(var(--chart-1))',
   },
-  safari: {
-    label: 'Safari',
+  second: {
     color: 'hsl(var(--chart-2))',
   },
-  firefox: {
-    label: 'Firefox',
+  third: {
     color: 'hsl(var(--chart-3))',
   },
-  edge: {
-    label: 'Edge',
+  fourth: {
     color: 'hsl(var(--chart-4))',
   },
-  other: {
-    label: 'Other',
+  fifth: {
     color: 'hsl(var(--chart-5))',
   },
 } satisfies ChartConfig
 
-function ResultChart() {
+const colors = [
+  'var(--color-first)',
+  'var(--color-second)',
+  'var(--color-third)',
+  'var(--color-fourth)',
+  'var(--color-fifth)',
+]
+
+const ResultChart = ({
+  title,
+  candidates,
+}: {
+  title: string
+  candidates: TResult[]
+}) => {
+  const formatted = candidates.map((c, i) => ({
+    ...c,
+    fill: colors[i],
+  }))
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bar Chart - Mixed</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart
             accessibilityLayer
-            data={chartData}
+            data={formatted}
             layout='vertical'
-            margin={{
-              left: 0,
-            }}
           >
             <YAxis
-              dataKey='browser'
+              dataKey='name'
               type='category'
               tickLine={false}
-              tickMargin={10}
               axisLine={false}
-              tickFormatter={value =>
-                chartConfig[value as keyof typeof chartConfig]?.label
-              }
             />
             <XAxis
-              dataKey='visitors'
+              dataKey='votes_count'
               type='number'
-              hide
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
             <Bar
-              dataKey='visitors'
+              dataKey='votes_count'
               layout='vertical'
               radius={5}
             />
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className='flex-col items-start gap-2 text-sm'>
-        <div className='flex gap-2 font-medium leading-none'>
-          Trending up by 5.2% this month <TrendingUp className='h-4 w-4' />
-        </div>
-        <div className='leading-none text-muted-foreground'>
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
     </Card>
   )
 }
