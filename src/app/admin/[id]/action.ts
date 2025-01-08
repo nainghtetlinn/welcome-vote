@@ -62,7 +62,7 @@ export const toggleActive = async ({
 }: {
   status: boolean
   id: string
-}) => {
+}): Promise<{ error: string | null }> => {
   const supabase = await createClient()
 
   const eventResult = await supabase
@@ -71,9 +71,10 @@ export const toggleActive = async ({
     .eq('id', id)
     .select()
 
-  if (eventResult.error) throw new Error(eventResult.error.message)
+  if (eventResult.error) return { error: eventResult.error.message }
 
   revalidatePath('/admin/:id')
+  return { error: null }
 }
 
 export const deleteEvent = async (

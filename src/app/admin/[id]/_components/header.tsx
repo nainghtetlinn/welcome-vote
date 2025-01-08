@@ -18,18 +18,14 @@ const Header = ({ event }: { event: Tables<'events'> }) => {
     let a = active
     setActive(!active)
     setLoading(true)
-    try {
-      await toggleActive({ id: event.id, status: active })
-    } catch (error) {
+    const result = await toggleActive({ id: event.id, status: active })
+    if (result.error) {
       setActive(a)
-      console.log('Error', error)
+      console.log(result.error)
       toast.error('Something went wrong')
-    } finally {
-      setLoading(false)
     }
+    setLoading(false)
   }
-
-  const handleDelete = async () => {}
 
   return (
     <header className='flex items-center justify-between mb-8'>
