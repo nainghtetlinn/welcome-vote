@@ -1,20 +1,43 @@
 'use client'
 
+import FormInput from '@/components/form-input'
+import { Button } from '@/components/ui/button'
 import {
   Card,
-  CardHeader,
-  CardTitle,
   CardContent,
   CardFooter,
+  CardHeader,
+  CardTitle,
 } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Form, FormField } from '@/components/ui/form'
 import { Loader2, Plus } from 'lucide-react'
 
+import { eventSchema, TEvent } from '@/types/event'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { createNewEvent } from '../action'
 
 const CreateEventCard = () => {
   const [loading, setLoading] = useState(false)
+
+  const form = useForm<TEvent>({
+    resolver: zodResolver(eventSchema),
+    defaultValues: { name: '' },
+  })
+
+  const onSubmit = async (data: TEvent) => {
+    setLoading(true)
+    try {
+      await createNewEvent(data)
+    } catch (error: any) {
+      console.log(error.message)
+      toast.error('Something went wrong')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <Card className='bg-primary text-primary-foreground'>
@@ -22,15 +45,26 @@ const CreateEventCard = () => {
         <CardTitle>Create New Event</CardTitle>
       </CardHeader>
       <CardContent>
-        <Input
-          className='bg-secondary text-secondary-foreground'
-          placeholder='20xx-20xx'
-        />
+        <Form {...form}>
+          <FormField
+            control={form.control}
+            name='name'
+            render={({ field }) => (
+              <FormInput
+                label=''
+                className='bg-secondary text-secondary-foreground'
+                placeholder='20xx-20xx'
+                {...field}
+              />
+            )}
+          />
+        </Form>
       </CardContent>
       <CardFooter className='flex justify-end'>
         <Button
           variant='secondary'
           disabled={loading}
+          onClick={form.handleSubmit(onSubmit)}
         >
           Create {loading ? <Loader2 className='animate-spin' /> : <Plus />}
         </Button>
