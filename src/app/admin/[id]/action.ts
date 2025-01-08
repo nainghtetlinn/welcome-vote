@@ -52,7 +52,7 @@ export async function createNewCandidate(e: TCandidate & { event_id: string }) {
     .update({ photo_url: urlResult.data.publicUrl })
     .eq('id', candidateResult.data.id)
 
-  revalidatePath('/admin/event/:id')
+  revalidatePath('/admin/:id')
 }
 
 export const toggleActive = async ({
@@ -72,5 +72,5 @@ export const toggleActive = async ({
 
   if (eventResult.error) throw new Error(eventResult.error.message)
 
-  revalidatePath('/admin/event/:id')
+  revalidatePath('/admin/:id')
 }
