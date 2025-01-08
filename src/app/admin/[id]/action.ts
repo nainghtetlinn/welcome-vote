@@ -1,9 +1,10 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
-import { createClient } from '@/utils/supabase/server'
 import { candidateSchema, TCandidate } from '@/types/candidate'
+import { createClient } from '@/utils/supabase/server'
 
 export async function createNewCandidate(e: TCandidate & { event_id: string }) {
   const { success, data } = candidateSchema.safeParse(e)
@@ -73,4 +74,17 @@ export const toggleActive = async ({
   if (eventResult.error) throw new Error(eventResult.error.message)
 
   revalidatePath('/admin/:id')
+}
+
+export const deleteEvent = async (
+  id: string
+): Promise<{ error: string | null }> => {
+  const supabase = await createClient()
+
+  const eventResult = await supabase.from('events').delete().eq('id', id)
+
+  if (eventResult.error) return { error: eventResult.error.message }
+
+  revalidatePath('/admin')
+  redirect('/admin')
 }

@@ -8,6 +8,7 @@ import { Tables } from '@/types/supabase'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { toggleActive } from '../action'
+import DeleteEventBtn from './delete-event-btn'
 
 const Header = ({ event }: { event: Tables<'events'> }) => {
   const [active, setActive] = useState(event.active)
@@ -28,6 +29,8 @@ const Header = ({ event }: { event: Tables<'events'> }) => {
     }
   }
 
+  const handleDelete = async () => {}
+
   return (
     <header className='flex items-center justify-between mb-8'>
       <div className='flex items-center gap-4'>
@@ -42,11 +45,14 @@ const Header = ({ event }: { event: Tables<'events'> }) => {
           <Badge variant='secondary'>Inactive</Badge>
         )}
       </div>
-      <Switch
-        checked={active}
-        onClick={handleClick}
-        disabled={loading}
-      />
+      <div className='flex items-center gap-4'>
+        <Switch
+          checked={active}
+          onClick={handleClick}
+          disabled={loading}
+        />
+        <DeleteEventBtn />
+      </div>
     </header>
   )
 }
