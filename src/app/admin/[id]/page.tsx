@@ -1,13 +1,11 @@
-import Profile from '@/components/profile'
 import AddNewCandidate from './_components/add-new-candidate'
 import Header from './_components/header'
+import Profile from './_components/profile'
 import ResultChart from './_components/result-chart'
 
 import { Tables } from '@/types/supabase'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
-
-type TResult = Tables<'voting_results'>
 
 const EventDetails = async ({
   params,
@@ -18,9 +16,13 @@ const EventDetails = async ({
 
   const supabase = await createClient()
 
-  const events = await supabase.from('events').select().eq('id', id).single()
+  const eventResult = await supabase
+    .from('events')
+    .select()
+    .eq('id', id)
+    .single()
 
-  const candidates = await supabase
+  const candidateResults = await supabase
     .from('candidates')
     .select()
     .eq('event_id', id)
@@ -30,14 +32,17 @@ const EventDetails = async ({
     .select()
     .eq('event_id', id)
 
-  if (!events.data || !candidates.data || !votingResults.data)
+  if (eventResult.error || candidateResults.error || votingResults.error)
+    redirect('/error')
+
+  if (!eventResult.data || !candidateResults.data || !votingResults.data)
     redirect('/admin')
 
   const grouped = votingResults.data.reduce<{
-    king: TResult[]
-    queen: TResult[]
-    prince: TResult[]
-    princess: TResult[]
+    king: Tables<'voting_results'>[]
+    queen: Tables<'voting_results'>[]
+    prince: Tables<'voting_results'>[]
+    princess: Tables<'voting_results'>[]
   }>(
     (g, c) => {
       if (c.category_id == 1) g.king.push(c)
@@ -52,15 +57,11 @@ const EventDetails = async ({
 
   return (
     <div className='p-4'>
-      <Header
-        id={events.data.id}
-        title={events.data.name}
-        status={events.data.active}
-      />
+      <Header event={eventResult.data} />
 
       <h3 className='font-bold text-lg mb-4'>Candidates</h3>
       <section className='flex flex-wrap gap-2 mb-8'>
-        {candidates.data?.map(c => (
+        {candidateResults.data.map(c => (
           <Profile
             name={c.name}
             src={c.photo_url!}

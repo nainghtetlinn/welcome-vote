@@ -1,22 +1,22 @@
 'use client'
 
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import {
   Breadcrumb,
-  BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbSeparator,
+  BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+import { Button } from '@/components/ui/button'
 import { Loader2, LogOut } from 'lucide-react'
 
-import React, { useState } from 'react'
-import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-
+import { usePathname } from 'next/navigation'
+import React, { useState } from 'react'
 import { logout } from '../action'
+import { toast } from 'sonner'
 
 const Header = () => {
   const path = usePathname()
@@ -27,8 +27,14 @@ const Header = () => {
 
   const handleClick = async () => {
     setLoading(true)
-    await logout()
-    setLoading(false)
+    try {
+      await logout()
+      toast.success('Success')
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

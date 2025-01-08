@@ -1,6 +1,6 @@
 'use client'
 
-import Profile from '@/assets/profile.png'
+import ProfileImage from '@/assets/profile.png'
 import FormInput from '@/components/form-input'
 import { Button } from '@/components/ui/button'
 import {
@@ -23,20 +23,20 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Loader2, Plus } from 'lucide-react'
-import Image from 'next/image'
 
 import { candidateSchema, TCandidate } from '@/types/candidate'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Image from 'next/image'
+import { useParams } from 'next/navigation'
 import { ChangeEvent, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { createNewCandidate } from '../action'
 import { toast } from 'sonner'
-import { useParams } from 'next/navigation'
+import { createNewCandidate } from '../action'
 
 const AddNewCandidate = () => {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [preview, setPreview] = useState('')
+  const [preview, setPreview] = useState<string>()
 
   const params = useParams<{ id: string }>()
 
@@ -104,21 +104,15 @@ const AddNewCandidate = () => {
                 htmlFor='photo'
                 className='cursor-pointer'
               >
-                {preview ? (
+                <div className='border rounded-full overflow-hidden w-[100px] h-[100px]'>
                   <Image
-                    src={preview}
+                    src={preview ?? ProfileImage}
                     alt='Profile'
                     width={100}
                     height={100}
-                    className='border rounded-full w-[100px] h-[100px] object-cover'
+                    className='w-full h-full object-cover'
                   />
-                ) : (
-                  <Image
-                    src={Profile}
-                    alt='Profile'
-                    className='border rounded-full w-[100px] h-[100px] object-cover'
-                  />
-                )}
+                </div>
                 <Input
                   id='photo'
                   type='file'
@@ -196,6 +190,16 @@ const AddNewCandidate = () => {
         </Form>
 
         <DialogFooter>
+          <Button
+            variant='secondary'
+            onClick={() => {
+              form.reset()
+              setPreview(undefined)
+              setOpen(false)
+            }}
+          >
+            Cancel
+          </Button>
           <Button
             disabled={loading}
             onClick={form.handleSubmit(onSubmit)}

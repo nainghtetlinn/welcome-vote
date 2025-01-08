@@ -18,8 +18,7 @@ export async function createNewCandidate(e: TCandidate & { event_id: string }) {
     .eq('id', e.event_id)
     .single()
 
-  if (eventResult.error || !eventResult.data)
-    throw new Error('Something went wrong')
+  if (eventResult.error) throw new Error(eventResult.error.message)
 
   const candidateResult = await supabase
     .from('candidates')
@@ -30,7 +29,7 @@ export async function createNewCandidate(e: TCandidate & { event_id: string }) {
       bio: data.bio,
       gender: data.gender,
     })
-    .select()
+    .select('id, roll_no, name')
     .single()
 
   if (candidateResult.error) throw new Error(candidateResult.error.message)
@@ -65,13 +64,13 @@ export const toggleActive = async ({
 }) => {
   const supabase = await createClient()
 
-  const { error } = await supabase
+  const eventResult = await supabase
     .from('events')
     .update({ active: !status })
     .eq('id', id)
     .select()
 
-  if (error) throw new Error(error.message)
+  if (eventResult.error) throw new Error(eventResult.error.message)
 
   revalidatePath('/admin/event/:id')
 }

@@ -1,4 +1,4 @@
-import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 
 const Profile = ({ name, src }: { name: string; src?: string }) => {
   return (

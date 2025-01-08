@@ -1,4 +1,3 @@
-import Profile from '@/components/profile'
 import { Badge } from '@/components/ui/badge'
 import {
   Card,
@@ -13,7 +12,7 @@ import Link from 'next/link'
 
 const EventCard = ({ event }: { event: Tables<'events_with_counts'> }) => {
   return (
-    <Link href={`/admin/event/${event.id}`}>
+    <Link href={`/admin/${event.id}`}>
       <Card className='hover:border-primary'>
         <CardHeader>
           <CardTitle className='flex items-center justify-between'>
@@ -28,12 +27,7 @@ const EventCard = ({ event }: { event: Tables<'events_with_counts'> }) => {
             {event.candidates_count} candidates | {event.votes_count} voters
           </CardDescription>
         </CardHeader>
-        <CardContent className='flex items-center justify-evenly'>
-          <Profile name='King' />
-          <Profile name='Queen' />
-          <Profile name='Prince' />
-          <Profile name='Princess' />
-        </CardContent>
+        <CardContent></CardContent>
       </Card>
     </Link>
   )

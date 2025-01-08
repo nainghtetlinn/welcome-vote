@@ -13,7 +13,7 @@ import { Loader2, Plus } from 'lucide-react'
 
 import { useState } from 'react'
 
-const CreateEvent = () => {
+const CreateEventCard = () => {
   const [loading, setLoading] = useState(false)
 
   return (
@@ -39,4 +39,4 @@ const CreateEvent = () => {
   )
 }
 
-export default CreateEvent
+export default CreateEventCard

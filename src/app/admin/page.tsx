@@ -1,17 +1,20 @@
-import Create from './_components/create-event-card'
+import CreateEventCard from './_components/create-event-card'
 import EventCard from './_components/event-card'
 
 import { createClient } from '@/utils/supabase/server'
+import { redirect } from 'next/navigation'
 
 const Admin = async () => {
   const supabase = await createClient()
 
   const events = await supabase.from('events_with_counts').select()
 
+  if (events.error || !events.data) redirect('/error')
+
   return (
     <div className='p-4 gap-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-      <Create />
-      {events.data?.map(event => (
+      <CreateEventCard />
+      {events.data.map(event => (
         <EventCard
           key={event.id}
           event={event}
