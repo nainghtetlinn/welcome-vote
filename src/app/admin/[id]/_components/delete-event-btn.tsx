@@ -28,6 +28,8 @@ const DeleteEventBtn = () => {
     if (result.error) {
       console.log(result.error)
       toast.error('Something went wrong')
+    } else {
+      toast.success('Success')
     }
     setLoading(false)
   }

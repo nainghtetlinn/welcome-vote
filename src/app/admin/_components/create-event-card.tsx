@@ -31,6 +31,7 @@ const CreateEventCard = () => {
     setLoading(true)
     try {
       await createNewEvent(data)
+      toast.success('Success')
     } catch (error: any) {
       console.log(error.message)
       toast.error('Something went wrong')
