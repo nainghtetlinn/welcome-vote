@@ -26,7 +26,7 @@ const DeleteEventBtn = () => {
     setLoading(true)
     const result = await deleteEvent(params.id)
     if (result.error) {
-      console.log(result.error)
+      console.log('Error', result.error)
       toast.error('Something went wrong')
     } else {
       toast.success('Success')
