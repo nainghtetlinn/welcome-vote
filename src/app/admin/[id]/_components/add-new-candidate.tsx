@@ -57,6 +57,7 @@ const AddNewCandidate = () => {
       await createNewCandidate({ ...data, event_id: params.id })
       toast.success('Success')
       setOpen(false)
+      setPreview(undefined)
       form.reset()
     } catch (error) {
       console.log('Error', error)
