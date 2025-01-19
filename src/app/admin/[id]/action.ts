@@ -89,3 +89,26 @@ export const deleteEvent = async (
   revalidatePath('/admin')
   redirect('/admin')
 }
+
+export const deleteCandidate = async (id: string) => {
+  const supabase = await createClient()
+
+  const candidateResult = await supabase
+    .from('candidates')
+    .delete()
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (candidateResult.error) throw new Error(candidateResult.error.message)
+
+  if (candidateResult.data.photo_url) {
+    const photoResult = await supabase.storage
+      .from('profile_pictures')
+      .remove([candidateResult.data.photo_url?.split('profile_pictures/')[1]])
+
+    if (photoResult.error) throw new Error(photoResult.error.message)
+  }
+
+  revalidatePath('/admin/:id')
+}
