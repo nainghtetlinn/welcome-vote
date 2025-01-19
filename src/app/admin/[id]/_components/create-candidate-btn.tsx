@@ -33,7 +33,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { createNewCandidate } from '../action'
 
-const AddNewCandidate = () => {
+const CreateCandidateBtn = () => {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [preview, setPreview] = useState<string>()
@@ -213,4 +213,4 @@ const AddNewCandidate = () => {
   )
 }
 
-export default AddNewCandidate
+export default CreateCandidateBtn

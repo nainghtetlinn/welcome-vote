@@ -1,4 +1,4 @@
-import AddNewCandidate from './_components/add-new-candidate'
+import CreateCandidateBtn from './_components/create-candidate-btn'
 import Header from './_components/header'
 import Profile from './_components/profile'
 import ResultChart from './_components/result-chart'
@@ -63,12 +63,11 @@ const EventDetails = async ({
       <section className='flex flex-wrap gap-2 mb-8'>
         {candidateResults.data.map(c => (
           <Profile
-            name={c.name}
-            src={c.photo_url!}
+            candidate={c}
             key={c.id}
           />
         ))}
-        <AddNewCandidate />
+        <CreateCandidateBtn />
       </section>
 
       <h3 className='font-bold text-lg mb-4'>Result Chart</h3>
