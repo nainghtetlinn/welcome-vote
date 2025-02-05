@@ -27,14 +27,16 @@ const Header = () => {
 
   const handleClick = async () => {
     setLoading(true)
-    try {
-      await logout()
+
+    const { error } = await logout()
+
+    if (!error) {
       toast.success('Success')
-    } catch (error: any) {
-      toast.error(error.message)
-    } finally {
-      setLoading(false)
+    } else {
+      toast.error(error)
     }
+
+    setLoading(false)
   }
 
   return (
