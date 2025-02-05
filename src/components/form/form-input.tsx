@@ -1,5 +1,5 @@
-import { FormControl, FormItem, FormLabel, FormMessage } from './ui/form'
-import { Input } from './ui/input'
+import { FormControl, FormItem, FormLabel, FormMessage } from '../ui/form'
+import { Input } from '../ui/input'
 
 const FormInput = ({
   label,
