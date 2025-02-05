@@ -6,7 +6,9 @@ import { redirect } from 'next/navigation'
 import { candidateSchema, TCandidate } from '@/types/candidate'
 import { createClient } from '@/utils/supabase/server'
 
-export async function createNewCandidate(e: TCandidate & { event_id: string }) {
+export const createNewCandidate = async (
+  e: TCandidate & { event_id: string }
+) => {
   const { success, data } = candidateSchema.safeParse(e)
 
   if (!success) throw new Error('Invalid inputs.')
@@ -30,7 +32,7 @@ export async function createNewCandidate(e: TCandidate & { event_id: string }) {
       bio: data.bio,
       gender: data.gender,
     })
-    .select('id, roll_no, name')
+    .select('id')
     .single()
 
   if (candidateResult.error) throw new Error(candidateResult.error.message)
@@ -38,20 +40,46 @@ export async function createNewCandidate(e: TCandidate & { event_id: string }) {
   const photoResult = await supabase.storage
     .from('profile_pictures')
     .upload(
-      `${eventResult.data.name}/${candidateResult.data.roll_no}_${candidateResult.data.name}`,
+      `${eventResult.data.name}/${candidateResult.data.id}_${data.photo.name}`,
       data.photo
     )
 
   if (photoResult.error) throw new Error(photoResult.error.message)
 
-  const urlResult = await supabase.storage
+  const urlResult = supabase.storage
     .from('profile_pictures')
     .getPublicUrl(photoResult.data.path)
 
   await supabase
     .from('candidates')
-    .update({ photo_url: urlResult.data.publicUrl })
+    .update({
+      photo_url: urlResult.data.publicUrl,
+      photo_path: photoResult.data.path,
+    })
     .eq('id', candidateResult.data.id)
+
+  revalidatePath('/admin/:id')
+}
+
+export const deleteCandidate = async (id: string) => {
+  const supabase = await createClient()
+
+  const candidateResult = await supabase
+    .from('candidates')
+    .delete()
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (candidateResult.error) throw new Error(candidateResult.error.message)
+
+  if (candidateResult.data.photo_path) {
+    const photoResult = await supabase.storage
+      .from('profile_pictures')
+      .remove([candidateResult.data.photo_path])
+
+    if (photoResult.error) throw new Error(photoResult.error.message)
+  }
 
   revalidatePath('/admin/:id')
 }
@@ -88,27 +116,4 @@ export const deleteEvent = async (
 
   revalidatePath('/admin')
   redirect('/admin')
-}
-
-export const deleteCandidate = async (id: string) => {
-  const supabase = await createClient()
-
-  const candidateResult = await supabase
-    .from('candidates')
-    .delete()
-    .eq('id', id)
-    .select()
-    .single()
-
-  if (candidateResult.error) throw new Error(candidateResult.error.message)
-
-  if (candidateResult.data.photo_url) {
-    const photoResult = await supabase.storage
-      .from('profile_pictures')
-      .remove([candidateResult.data.photo_url?.split('profile_pictures/')[1]])
-
-    if (photoResult.error) throw new Error(photoResult.error.message)
-  }
-
-  revalidatePath('/admin/:id')
 }
