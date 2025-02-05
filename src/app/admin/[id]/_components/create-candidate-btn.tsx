@@ -18,6 +18,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -98,32 +99,39 @@ const CreateCandidateBtn = () => {
         </DialogHeader>
 
         <Form {...form}>
-          <FormItem>
-            <FormLabel>Photo</FormLabel>
-            <FormControl>
-              <Label
-                htmlFor='photo'
-                className='cursor-pointer'
-              >
-                <div className='border rounded-full overflow-hidden w-[100px] h-[100px]'>
-                  <Image
-                    src={preview ?? ProfileImage}
-                    alt='Profile'
-                    width={100}
-                    height={100}
-                    className='w-full h-full object-cover'
-                  />
-                </div>
-                <Input
-                  id='photo'
-                  type='file'
-                  accept='image/*'
-                  className='hidden'
-                  onChange={uploadImageToClient}
-                />
-              </Label>
-            </FormControl>
-          </FormItem>
+          <FormField
+            control={form.control}
+            name='photo'
+            render={() => (
+              <FormItem>
+                <FormLabel>Photo</FormLabel>
+                <FormControl>
+                  <Label
+                    htmlFor='photo'
+                    className='cursor-pointer'
+                  >
+                    <div className='border rounded-full overflow-hidden w-[100px] h-[100px]'>
+                      <Image
+                        src={preview ?? ProfileImage}
+                        alt='Profile'
+                        width={100}
+                        height={100}
+                        className='w-full h-full object-cover'
+                      />
+                    </div>
+                    <Input
+                      id='photo'
+                      type='file'
+                      accept='image/*'
+                      className='hidden'
+                      onChange={uploadImageToClient}
+                    />
+                  </Label>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}
