@@ -25,6 +25,7 @@ const MyVotes = () => {
 
   return (
     <div>
+      {/* Mini votes list */}
       <motion.div
         style={{
           top: dropPosition,
@@ -33,7 +34,10 @@ const MyVotes = () => {
         }}
         className='fixed left-0 right-0 z-50 p-4 bg-card text-card-foreground shadow-md'
       >
-        <div className='flex gap-4'>
+        <div className='flex justify-center gap-4'>
+          <h3 className='font-bold text-xl'>
+            Your <span className='text-primary text-2xl underline'>Votes</span>
+          </h3>
           <MyVoteMini
             title='King'
             candidate={votes.king}
@@ -52,6 +56,8 @@ const MyVotes = () => {
           />
         </div>
       </motion.div>
+
+      {/* Bigger votes list */}
       <div
         ref={containerRef}
         className='grid grid-cols-2 sm:grid-cols-4 gap-2'
@@ -98,7 +104,7 @@ const MyVoteMini = ({
           alt={title}
           width={40}
           height={40}
-          className='w-full h-full'
+          className='w-full h-full object-cover'
         />
       </div>
     )
@@ -115,7 +121,10 @@ const MyVoteMini = ({
       </Button>
       {candidate.photo_url ? (
         <Avatar>
-          <AvatarImage src={candidate.photo_url} />
+          <AvatarImage
+            src={candidate.photo_url}
+            className='object-cover'
+          />
           <AvatarFallback>{candidate.name[0]}</AvatarFallback>
         </Avatar>
       ) : (
@@ -125,7 +134,7 @@ const MyVoteMini = ({
             alt={title}
             width={40}
             height={40}
-            className='w-full h-full'
+            className='w-full h-full object-cover'
           />
         </div>
       )}
@@ -169,7 +178,10 @@ const MyVote = ({
       <div className='flex-1 flex items-center gap-2'>
         {candidate.photo_url ? (
           <Avatar>
-            <AvatarImage src={candidate.photo_url} />
+            <AvatarImage
+              src={candidate.photo_url}
+              className='object-cover'
+            />
             <AvatarFallback>{candidate.name[0]}</AvatarFallback>
           </Avatar>
         ) : (
@@ -179,7 +191,7 @@ const MyVote = ({
               alt={title}
               width={40}
               height={40}
-              className='w-full h-full'
+              className='w-full h-full object-cover'
             />
           </div>
         )}
