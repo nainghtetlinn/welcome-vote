@@ -19,18 +19,18 @@ const EventDetails = async ({
   const eventResult = await supabase
     .from('events')
     .select()
-    .eq('id', id)
+    .eq('name', id)
     .single()
 
   const candidateResults = await supabase
     .from('candidates')
     .select()
-    .eq('event_id', id)
+    .eq('event_id', eventResult.data!.id)
 
   const votingResults = await supabase
     .from('voting_results')
     .select()
-    .eq('event_id', id)
+    .eq('event_id', eventResult.data!.id)
 
   if (eventResult.error || candidateResults.error || votingResults.error)
     redirect('/error')

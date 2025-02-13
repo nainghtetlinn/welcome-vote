@@ -12,7 +12,7 @@ import Link from 'next/link'
 
 const EventCard = ({ event }: { event: Tables<'events_with_counts'> }) => {
   return (
-    <Link href={`/admin/${event.id}`}>
+    <Link href={`/admin/${event.name}`}>
       <Card className='hover:border-primary'>
         <CardHeader>
           <CardTitle className='flex items-center justify-between'>

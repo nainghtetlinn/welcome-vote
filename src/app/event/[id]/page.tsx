@@ -14,7 +14,7 @@ const Vote = async ({ params }: { params: Promise<{ id: string }> }) => {
   const event = await supabase
     .from('events')
     .select('*, candidates(*)')
-    .eq('id', id)
+    .eq('name', id)
     .eq('active', true)
     .single()
 
