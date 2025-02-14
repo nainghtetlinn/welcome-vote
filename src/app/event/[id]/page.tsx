@@ -30,7 +30,7 @@ const Vote = async ({ params }: { params: Promise<{ id: string }> }) => {
         </h3>
         <MyVotes />
         <div className='flex justify-end'>
-          <SubmitBtn />
+          <SubmitBtn eventId={event.data.id} />
         </div>
       </section>
 
