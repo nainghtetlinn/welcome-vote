@@ -17,6 +17,7 @@ export type Database = {
           gender: Database["public"]["Enums"]["gender"]
           id: string
           name: string
+          photo_path: string | null
           photo_url: string | null
           roll_no: string
         }
@@ -27,6 +28,7 @@ export type Database = {
           gender?: Database["public"]["Enums"]["gender"]
           id?: string
           name: string
+          photo_path?: string | null
           photo_url?: string | null
           roll_no: string
         }
@@ -37,6 +39,7 @@ export type Database = {
           gender?: Database["public"]["Enums"]["gender"]
           id?: string
           name?: string
+          photo_path?: string | null
           photo_url?: string | null
           roll_no?: string
         }
@@ -46,13 +49,6 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "candidates_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "events_with_counts"
             referencedColumns: ["id"]
           },
         ]
@@ -96,6 +92,30 @@ export type Database = {
         }
         Relationships: []
       }
+      voters: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          raw_data: string
+          roll_no: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          raw_data: string
+          roll_no: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          raw_data?: string
+          roll_no?: string
+        }
+        Relationships: []
+      }
       votes: {
         Row: {
           candidate_id: string
@@ -103,7 +123,7 @@ export type Database = {
           created_at: string
           event_id: string
           id: string
-          session_token: string
+          voter_id: string
         }
         Insert: {
           candidate_id: string
@@ -111,7 +131,7 @@ export type Database = {
           created_at?: string
           event_id: string
           id?: string
-          session_token?: string
+          voter_id: string
         }
         Update: {
           candidate_id?: string
@@ -119,7 +139,7 @@ export type Database = {
           created_at?: string
           event_id?: string
           id?: string
-          session_token?: string
+          voter_id?: string
         }
         Relationships: [
           {
@@ -144,42 +164,52 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "votes_event_id_fkey"
-            columns: ["event_id"]
+            foreignKeyName: "votes_voter_id_fkey"
+            columns: ["voter_id"]
             isOneToOne: false
-            referencedRelation: "events_with_counts"
+            referencedRelation: "voters"
             referencedColumns: ["id"]
           },
         ]
       }
     }
     Views: {
-      events_with_counts: {
+      voting_results: {
         Row: {
-          active: boolean | null
-          candidates_count: number | null
-          created_at: string | null
-          duration_in_min: number | null
-          id: string | null
+          candidate_id: string | null
+          category: string | null
+          category_id: number | null
+          event_id: string | null
           name: string | null
           votes_count: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "votes_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "votes_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "votes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Functions: {
-      fetch_events_with_counts: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          id: string
-          name: string
-          active: boolean
-          duration_in_min: number
-          created_at: string
-          candidates_count: number
-          votes_count: number
-        }[]
-      }
+      [_ in never]: never
     }
     Enums: {
       gender: "male" | "female"
