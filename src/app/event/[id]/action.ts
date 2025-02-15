@@ -33,6 +33,15 @@ export const submitVote = async (data: TVote, eventId: string, qr: string) => {
 
   if (voterResult.error) throw new Error('Something went wrong')
 
+  const myVotes = await supabase
+    .from('votes')
+    .select('*', { count: 'exact', head: true })
+    .eq('event_id', eventId)
+    .eq('voter_id', voterResult.data.id)
+
+  if (myVotes.count && myVotes.count > 0)
+    throw new Error('Already voted to this event')
+
   if (!data.king || !data.queen || !data.prince || !data.princess)
     throw new Error('All votes are required')
 
