@@ -16,8 +16,10 @@ import { IDetectedBarcode } from '@yudiel/react-qr-scanner'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { submitVote } from '../action'
+import { useRouter } from 'next/navigation'
 
 const SubmitBtn = ({ eventId }: { eventId: string }) => {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const { votes } = useVoteContext()
@@ -37,6 +39,7 @@ const SubmitBtn = ({ eventId }: { eventId: string }) => {
         data.rawValue
       )
       toast.success('Success')
+      router.replace('/success')
     } catch (error: any) {
       toast.error(error.message)
       console.log(error)
