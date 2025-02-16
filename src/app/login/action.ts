@@ -17,6 +17,6 @@ export async function login(e: TLogin) {
 
   if (error) redirect('/error')
 
-  revalidatePath('/', 'layout')
-  redirect('/')
+  revalidatePath('/admin', 'layout')
+  redirect('/admin')
 }

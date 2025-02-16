@@ -39,20 +39,20 @@ const MyVotes = () => {
             Your <span className='text-primary text-2xl underline'>Votes</span>
           </h3>
           <MyVoteMini
-            title='King'
-            candidate={votes.king}
-          />
-          <MyVoteMini
             title='Queen'
             candidate={votes.queen}
           />
           <MyVoteMini
-            title='Prince'
-            candidate={votes.prince}
-          />
-          <MyVoteMini
             title='Princess'
             candidate={votes.princess}
+          />
+          <MyVoteMini
+            title='King'
+            candidate={votes.king}
+          />
+          <MyVoteMini
+            title='Prince'
+            candidate={votes.prince}
           />
         </div>
       </motion.div>
@@ -63,20 +63,20 @@ const MyVotes = () => {
         className='grid grid-cols-2 sm:grid-cols-4 gap-2'
       >
         <MyVote
-          title='King'
-          candidate={votes.king}
-        />
-        <MyVote
           title='Queen'
           candidate={votes.queen}
         />
         <MyVote
-          title='Prince'
-          candidate={votes.prince}
-        />
-        <MyVote
           title='Princess'
           candidate={votes.princess}
+        />
+        <MyVote
+          title='King'
+          candidate={votes.king}
+        />
+        <MyVote
+          title='Prince'
+          candidate={votes.prince}
         />
       </div>
     </div>

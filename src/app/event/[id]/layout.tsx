@@ -1,9 +1,17 @@
 import Header from './_components/header'
 
-const EventLayout = ({ children }: { children: React.ReactNode }) => {
+const EventLayout = async ({
+  children,
+  params,
+}: {
+  children: React.ReactNode
+  params: Promise<{ id: string }>
+}) => {
+  const { id } = await params
+
   return (
     <main className='container mx-auto max-w-screen-lg'>
-      <Header />
+      <Header id={id} />
       {children}
     </main>
   )

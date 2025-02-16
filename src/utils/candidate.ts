@@ -4,7 +4,7 @@ type TCandidates = Tables<'candidates'>[]
 
 export const filterCandidates = (
   candidates: TCandidates
-): [TCandidates, TCandidates] => {
+): { males: TCandidates; females: TCandidates } => {
   const males: TCandidates = []
   const females: TCandidates = []
 
@@ -13,5 +13,5 @@ export const filterCandidates = (
     else females.push(c)
   })
 
-  return [males, females]
+  return { males, females }
 }

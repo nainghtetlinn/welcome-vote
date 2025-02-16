@@ -20,7 +20,7 @@ const Vote = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   if (event.error || !event.data) redirect('/error')
 
-  const [males, females] = filterCandidates(event.data.candidates)
+  const { males, females } = filterCandidates(event.data.candidates)
 
   return (
     <>
@@ -36,47 +36,16 @@ const Vote = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       <section className='py-4 pl-2 space-y-6'>
         <div>
-          <h3 className='font-bold text-xl mb-2'>
-            Candidates for{' '}
-            <span className='text-primary text-2xl underline'>King</span>
+          <h3 className='font-bold text-2xl text-primary mb-2'>
+            Queen / Princess
           </h3>
-          <CandidatesCarousel
-            category='king'
-            candidates={males}
-          />
+          <CandidatesCarousel candidates={females} />
         </div>
-
         <div>
-          <h3 className='font-bold text-xl mb-2'>
-            Candidates for{' '}
-            <span className='text-primary text-2xl underline'>Queen</span>
+          <h3 className='font-bold text-2xl text-primary mb-2'>
+            King / Prince
           </h3>
-          <CandidatesCarousel
-            category='queen'
-            candidates={females}
-          />
-        </div>
-
-        <div>
-          <h3 className='font-bold text-xl mb-2'>
-            Candidates for{' '}
-            <span className='text-primary text-2xl underline'>Prince</span>
-          </h3>
-          <CandidatesCarousel
-            category='prince'
-            candidates={males}
-          />
-        </div>
-
-        <div>
-          <h3 className='font-bold text-xl mb-2'>
-            Candidates for{' '}
-            <span className='text-primary text-2xl underline'>Princess</span>
-          </h3>
-          <CandidatesCarousel
-            category='princess'
-            candidates={females}
-          />
+          <CandidatesCarousel candidates={males} />
         </div>
       </section>
     </>

@@ -1,6 +1,5 @@
 'use client'
 
-import { Vote } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 import { useVoteContext } from '@/providers/vote-provider'
@@ -28,22 +27,24 @@ const VoteBtn = ({
 
   return (
     <>
-      {isVoted ? (
-        <Button
-          variant='secondary'
-          className='w-full'
-          onClick={handleCancel}
-        >
-          Cancel
-        </Button>
-      ) : (
-        <Button
-          className='w-full'
-          onClick={handleClick}
-        >
-          <Vote /> Vote
-        </Button>
-      )}
+      <div className='flex-1'>
+        {isVoted ? (
+          <Button
+            variant='secondary'
+            className='w-full capitalize'
+            onClick={handleCancel}
+          >
+            Cancel
+          </Button>
+        ) : (
+          <Button
+            className='w-full capitalize'
+            onClick={handleClick}
+          >
+            {category}
+          </Button>
+        )}
+      </div>
     </>
   )
 }

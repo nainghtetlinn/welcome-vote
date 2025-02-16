@@ -73,13 +73,13 @@ const Login = () => {
                 )}
               />
             </CardContent>
-            <CardFooter>
+            <CardFooter className='flex justify-end'>
               <Button
                 type='submit'
                 disabled={loading}
               >
-                Login{' '}
                 {loading ? <Loader2 className='animate-spin' /> : <LogIn />}
+                Login
               </Button>
             </CardFooter>
           </Card>
