@@ -51,6 +51,13 @@ export type Database = {
             referencedRelation: "events"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "candidates_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_with_counts"
+            referencedColumns: ["id"]
+          },
         ]
       }
       categories: {
@@ -164,6 +171,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "votes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_with_counts"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "votes_voter_id_fkey"
             columns: ["voter_id"]
             isOneToOne: false
@@ -174,6 +188,18 @@ export type Database = {
       }
     }
     Views: {
+      events_with_counts: {
+        Row: {
+          active: boolean | null
+          candidates_count: number | null
+          created_at: string | null
+          duration_in_min: number | null
+          id: string | null
+          name: string | null
+          votes_count: number | null
+        }
+        Relationships: []
+      }
       voting_results: {
         Row: {
           candidate_id: string | null
@@ -203,6 +229,13 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "votes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_with_counts"
             referencedColumns: ["id"]
           },
         ]
