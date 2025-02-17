@@ -10,11 +10,10 @@ const VoteBtn = ({
   category,
 }: {
   candidate: Tables<'candidates'>
-  category: string
+  category: 'king' | 'queen' | 'prince' | 'princess'
 }) => {
   const { votes, updateVote } = useVoteContext()
 
-  //@ts-ignore
   const isVoted = votes[category] && votes[category].id == candidate.id
 
   const handleClick = () => {

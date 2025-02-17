@@ -15,7 +15,7 @@ const Header = ({ event }: { event: Tables<'events'> }) => {
   const [loading, setLoading] = useState(false)
 
   const handleClick = async () => {
-    let a = active
+    const a = active
     setActive(!active)
     setLoading(true)
 
