@@ -1,4 +1,9 @@
+import type { Metadata } from 'next'
 import Header from './_components/header'
+
+export const metadata: Metadata = {
+  title: 'Admin',
+}
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (

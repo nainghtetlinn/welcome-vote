@@ -1,4 +1,13 @@
+import type { Metadata } from 'next'
 import Header from './_components/header'
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> => {
+  return { title: 'IT Welcome Voter | ' + (await params).id }
+}
 
 const EventLayout = async ({
   children,
