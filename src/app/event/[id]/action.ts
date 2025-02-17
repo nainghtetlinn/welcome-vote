@@ -1,5 +1,6 @@
 'use server'
 
+import { ErrorResponse } from '@/types/error'
 import { createError } from '@/utils/error'
 import { extractDetails, isValidQRCode } from '@/utils/qrcode'
 import { createClient } from '@/utils/supabase/server'
@@ -17,7 +18,7 @@ export const submitVote = async (
   data: TVote,
   eventId: string,
   qr: string
-): Promise<{ success: boolean; message?: string; error?: any }> => {
+): Promise<ErrorResponse> => {
   const supabase = await createClient()
 
   /**

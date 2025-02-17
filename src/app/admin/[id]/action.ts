@@ -4,14 +4,16 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { candidateSchema, TCandidate } from '@/types/candidate'
+import { ErrorResponse } from '@/types/error'
+import { createError } from '@/utils/error'
 import { createClient } from '@/utils/supabase/server'
 
 export const createNewCandidate = async (
   e: TCandidate & { event_id: string }
-) => {
+): Promise<ErrorResponse> => {
   const { success, data } = candidateSchema.safeParse(e)
 
-  if (!success) throw new Error('Invalid inputs.')
+  if (!success) return { success: false, message: 'Invalid inputs' }
 
   const supabase = await createClient()
 
@@ -21,7 +23,7 @@ export const createNewCandidate = async (
     .eq('id', e.event_id)
     .single()
 
-  if (eventResult.error) throw new Error(eventResult.error.message)
+  if (eventResult.error) return createError(eventResult.error)
 
   const candidateResult = await supabase
     .from('candidates')
@@ -35,7 +37,7 @@ export const createNewCandidate = async (
     .select('id')
     .single()
 
-  if (candidateResult.error) throw new Error(candidateResult.error.message)
+  if (candidateResult.error) return createError(candidateResult.error)
 
   const photoResult = await supabase.storage
     .from('profile_pictures')
@@ -44,13 +46,13 @@ export const createNewCandidate = async (
       data.photo
     )
 
-  if (photoResult.error) throw new Error(photoResult.error.message)
+  if (photoResult.error) return createError(photoResult.error)
 
   const urlResult = supabase.storage
     .from('profile_pictures')
     .getPublicUrl(photoResult.data.path)
 
-  await supabase
+  const updatedResult = await supabase
     .from('candidates')
     .update({
       photo_url: urlResult.data.publicUrl,
@@ -58,10 +60,13 @@ export const createNewCandidate = async (
     })
     .eq('id', candidateResult.data.id)
 
+  if (updatedResult.error) return createError(updatedResult.error)
+
   revalidatePath('/admin/:id')
+  return { success: true, message: 'Successfully created new candidate' }
 }
 
-export const deleteCandidate = async (id: string) => {
+export const deleteCandidate = async (id: string): Promise<ErrorResponse> => {
   const supabase = await createClient()
 
   const candidateResult = await supabase
@@ -71,17 +76,18 @@ export const deleteCandidate = async (id: string) => {
     .select()
     .single()
 
-  if (candidateResult.error) throw new Error(candidateResult.error.message)
+  if (candidateResult.error) return createError(candidateResult.error)
 
   if (candidateResult.data.photo_path) {
     const photoResult = await supabase.storage
       .from('profile_pictures')
       .remove([candidateResult.data.photo_path])
 
-    if (photoResult.error) throw new Error(photoResult.error.message)
+    if (photoResult.error) return createError(photoResult.error)
   }
 
   revalidatePath('/admin/:id')
+  return { success: true, message: 'Successfully deleted candidate' }
 }
 
 export const toggleActive = async ({
@@ -90,7 +96,7 @@ export const toggleActive = async ({
 }: {
   status: boolean
   id: string
-}): Promise<{ error: string | null }> => {
+}): Promise<ErrorResponse> => {
   const supabase = await createClient()
 
   const eventResult = await supabase
@@ -99,20 +105,18 @@ export const toggleActive = async ({
     .eq('id', id)
     .select()
 
-  if (eventResult.error) return { error: eventResult.error.message }
+  if (eventResult.error) return createError(eventResult.error)
 
   revalidatePath('/admin/:id')
-  return { error: null }
+  return { success: true, message: 'Successfully toggled active status' }
 }
 
-export const deleteEvent = async (
-  id: string
-): Promise<{ error: string | null }> => {
+export const deleteEvent = async (id: string): Promise<ErrorResponse> => {
   const supabase = await createClient()
 
   const eventResult = await supabase.from('events').delete().eq('id', id)
 
-  if (eventResult.error) return { error: eventResult.error.message }
+  if (eventResult.error) return createError(eventResult.error)
 
   revalidatePath('/admin')
   redirect('/admin')

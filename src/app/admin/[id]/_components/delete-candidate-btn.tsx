@@ -22,15 +22,15 @@ const DeleteCandidateBtn = ({ id }: { id: string }) => {
 
   const handleClick = async () => {
     setLoading(true)
-    try {
-      await deleteCandidate(id)
-      toast.success('Success')
-    } catch (error) {
-      console.log('Error', error)
-      toast.error('Something went wrong')
-    } finally {
-      setLoading(false)
+
+    const { success, message } = await deleteCandidate(id)
+    if (success) {
+      toast.success(message)
+    } else {
+      toast.error(message)
     }
+
+    setLoading(false)
   }
 
   return (

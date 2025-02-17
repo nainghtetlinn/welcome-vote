@@ -24,13 +24,12 @@ const DeleteEventBtn = () => {
 
   const handleClick = async () => {
     setLoading(true)
-    const result = await deleteEvent(params.id)
-    if (result.error) {
-      console.log('Error', result.error)
-      toast.error('Something went wrong')
-    } else {
-      toast.success('Success')
+
+    const { success, message } = await deleteEvent(params.id)
+    if (!success) {
+      toast.error(message)
     }
+
     setLoading(false)
   }
 

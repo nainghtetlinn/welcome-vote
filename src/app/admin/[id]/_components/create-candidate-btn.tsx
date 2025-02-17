@@ -42,18 +42,21 @@ const CreateCandidateBtn = () => {
 
   const onSubmit = async (data: TCandidate) => {
     setLoading(true)
-    try {
-      await createNewCandidate({ ...data, event_id: params.id })
-      toast.success('Success')
+
+    const { success, message } = await createNewCandidate({
+      ...data,
+      event_id: params.id,
+    })
+    if (success) {
+      toast.success(message)
       setOpen(false)
       ref.current?.clearPreview()
       form.reset()
-    } catch (error) {
-      console.log('Error', error)
-      toast.error('Something went wrong')
-    } finally {
-      setLoading(false)
+    } else {
+      toast.error(message)
     }
+
+    setLoading(false)
   }
 
   return (

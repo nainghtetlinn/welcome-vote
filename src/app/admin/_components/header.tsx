@@ -15,8 +15,8 @@ import { Loader2, LogOut } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useState } from 'react'
-import { logout } from '../action'
 import { toast } from 'sonner'
+import { logout } from '../action'
 
 const Header = () => {
   const path = usePathname()
@@ -28,12 +28,9 @@ const Header = () => {
   const handleClick = async () => {
     setLoading(true)
 
-    const { error } = await logout()
-
-    if (!error) {
-      toast.success('Success')
-    } else {
-      toast.error(error)
+    const { success, message } = await logout()
+    if (!success) {
+      toast.error(message)
     }
 
     setLoading(false)

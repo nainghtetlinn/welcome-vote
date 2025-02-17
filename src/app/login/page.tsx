@@ -1,30 +1,31 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from '@/components/ui/form'
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Loader2, LogIn } from 'lucide-react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'sonner'
 
-import { login } from './action'
 import { loginSchema, TLogin } from '@/types/login'
+import { login } from './action'
 
 const Login = () => {
   const form = useForm<TLogin>({
@@ -35,7 +36,12 @@ const Login = () => {
 
   const onSubmit = async (data: TLogin) => {
     setLoading(true)
-    await login(data)
+
+    const { success, message } = await login(data)
+    if (!success) {
+      toast.error(message)
+    }
+
     setLoading(false)
   }
 

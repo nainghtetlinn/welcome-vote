@@ -18,12 +18,18 @@ const Header = ({ event }: { event: Tables<'events'> }) => {
     let a = active
     setActive(!active)
     setLoading(true)
-    const result = await toggleActive({ id: event.id, status: active })
-    if (result.error) {
+
+    const { success, message } = await toggleActive({
+      id: event.id,
+      status: active,
+    })
+    if (success) {
+      toast.success(message)
+    } else {
       setActive(a)
-      console.log(result.error)
-      toast.error('Something went wrong')
+      toast.error(message)
     }
+
     setLoading(false)
   }
 

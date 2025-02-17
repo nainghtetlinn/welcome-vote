@@ -29,15 +29,15 @@ const CreateEventCard = () => {
 
   const onSubmit = async (data: TEvent) => {
     setLoading(true)
-    try {
-      await createNewEvent(data)
-      toast.success('Success')
-    } catch (error: any) {
-      console.log('Error', error.message)
-      toast.error('Something went wrong')
-    } finally {
-      setLoading(false)
+
+    const { success, message } = await createNewEvent(data)
+    if (success) {
+      toast.success(message)
+    } else {
+      toast.error(message)
     }
+
+    setLoading(false)
   }
 
   return (

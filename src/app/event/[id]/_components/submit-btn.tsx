@@ -25,7 +25,8 @@ const SubmitBtn = ({ eventId }: { eventId: string }) => {
   const handleSubmit = async (data: IDetectedBarcode) => {
     setOpen(false)
     setLoading(true)
-    const { success, message, error } = await submitVote(
+
+    const { success, message } = await submitVote(
       {
         king: votes.king?.id,
         queen: votes.queen?.id,
@@ -37,8 +38,8 @@ const SubmitBtn = ({ eventId }: { eventId: string }) => {
     )
     if (!success) {
       toast.error(message)
-      console.log(error)
     }
+
     setLoading(false)
   }
 
