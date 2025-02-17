@@ -24,10 +24,8 @@ const Vote = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <>
-      <section className='border-b py-4 px-2 mb-4 space-y-2'>
-        <h3 className='font-bold text-xl'>
-          Your <span className='text-primary text-2xl underline'>Votes</span>
-        </h3>
+      <section className='py-4 px-2 mb-4 space-y-2'>
+        <h3 className='font-bold text-2xl'>Your Votes</h3>
         <MyVotes />
         <div className='flex justify-end'>
           <SubmitBtn eventId={event.data.id} />
@@ -36,15 +34,11 @@ const Vote = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       <section className='py-4 pl-2 space-y-6'>
         <div>
-          <h3 className='font-bold text-2xl text-primary mb-2'>
-            Queen / Princess
-          </h3>
+          <h3 className='font-bold text-2xl mb-2'>Queen / Princess</h3>
           <CandidatesCarousel candidates={females} />
         </div>
         <div>
-          <h3 className='font-bold text-2xl text-primary mb-2'>
-            King / Prince
-          </h3>
+          <h3 className='font-bold text-2xl mb-2'>King / Prince</h3>
           <CandidatesCarousel candidates={males} />
         </div>
       </section>

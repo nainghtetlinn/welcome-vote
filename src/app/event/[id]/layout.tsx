@@ -10,10 +10,13 @@ const EventLayout = async ({
   const { id } = await params
 
   return (
-    <main className='container mx-auto max-w-screen-lg'>
-      <Header id={id} />
-      {children}
-    </main>
+    <>
+      <div className='bg'></div>
+      <main className='container mx-auto max-w-screen-lg'>
+        <Header id={id} />
+        {children}
+      </main>
+    </>
   )
 }
 
