@@ -3,13 +3,15 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
   const supabase = await createClient();
-  const event = await supabase.from("events").select("*").eq("active", true);
+  const event = await supabase
+    .from("events")
+    .select("*")
+    .eq("active", true)
+    .single();
 
-  console.log(event);
+  if (event.error || !event.data) redirect("/error");
 
-  //   if (event.error || !event.data) redirect("/error");
-
-  //   redirect("/event/" + event.data?.name);
+  redirect("/event/" + event.data.name);
 
   return <div>Hello</div>;
 }
