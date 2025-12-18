@@ -79,19 +79,19 @@ export type Database = {
       }
       events: {
         Row: {
-          active: boolean | null
+          active: boolean
           created_at: string
           id: string
           name: string
         }
         Insert: {
-          active?: boolean | null
+          active?: boolean
           created_at?: string
           id?: string
           name: string
         }
         Update: {
-          active?: boolean | null
+          active?: boolean
           created_at?: string
           id?: string
           name?: string

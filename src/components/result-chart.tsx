@@ -81,7 +81,12 @@ const ResultChart = ({
               />
               <ChartTooltip
                 cursor={false}
-                content={<ChartTooltipContent indicator="line" />}
+                content={(props) => (
+                  <ChartTooltipContent
+                    {...props}
+                    indicator="line"
+                  />
+                )}
               />
               <Bar
                 dataKey="votes_count"
