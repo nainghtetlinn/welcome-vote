@@ -5,6 +5,7 @@ import SubmitBtn from "./_components/submit-btn";
 import { filterCandidates } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { SelectedVotes } from "./_components/selected-votes";
 
 const Vote = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
@@ -34,11 +35,17 @@ const Vote = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       <section className="py-4 pl-2 space-y-6">
         <div>
-          <h3 className="font-bold text-2xl mb-2">Queen / Princess</h3>
+          <div className="flex items-center gap-4">
+            <h3 className="font-bold text-2xl mb-2">Queen / Princess</h3>
+            <SelectedVotes type="female" />
+          </div>
           <CandidatesCarousel candidates={females} />
         </div>
         <div>
-          <h3 className="font-bold text-2xl mb-2">King / Prince</h3>
+          <div className="flex items-center gap-4">
+            <h3 className="font-bold text-2xl mb-2">King / Prince</h3>
+            <SelectedVotes type="male" />
+          </div>
           <CandidatesCarousel candidates={males} />
         </div>
       </section>
