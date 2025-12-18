@@ -15,19 +15,19 @@ type TResult = Tables<"voting_results">;
 
 const chartConfig = {
   first: {
-    color: "hsl(var(--chart-1))",
+    color: "var(--chart-1)",
   },
   second: {
-    color: "hsl(var(--chart-2))",
+    color: "var(--chart-2)",
   },
   third: {
-    color: "hsl(var(--chart-3))",
+    color: "var(--chart-3)",
   },
   fourth: {
-    color: "hsl(var(--chart-4))",
+    color: "var(--chart-4)",
   },
   fifth: {
-    color: "hsl(var(--chart-5))",
+    color: "var(--chart-5)",
   },
 } satisfies ChartConfig;
 
@@ -48,6 +48,7 @@ const ResultChart = ({
 }) => {
   const formatted = candidates.map((c, i) => ({
     ...c,
+    label: `${c.name} (${c.roll_no})`,
     fill: colors[i],
   }));
 
@@ -68,7 +69,7 @@ const ResultChart = ({
               }}
             >
               <YAxis
-                dataKey="name"
+                dataKey="label"
                 type="category"
                 tickLine={false}
                 axisLine={false}
