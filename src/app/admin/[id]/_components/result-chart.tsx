@@ -39,7 +39,7 @@ const colors = [
   "var(--color-fifth)",
 ];
 
-const ResultChart = ({
+export const ResultChart = ({
   title,
   candidates,
 }: {
@@ -106,5 +106,3 @@ const ResultChart = ({
     </Card>
   );
 };
-
-export default ResultChart;

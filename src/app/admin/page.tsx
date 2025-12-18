@@ -1,5 +1,5 @@
-import CreateEventCard from "@/components/create-event-card";
-import EventCard from "@/components/event-card";
+import { CreateEventCard } from "./_components/create-event-card";
+import { EventCard } from "./_components/event-card";
 
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";

@@ -1,6 +1,6 @@
 "use client";
 
-import DeleteEventBtn from "@/components/delete-event-btn";
+import { DeleteEventBtn } from "./delete-event-btn";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Loader2 } from "lucide-react";
@@ -10,7 +10,7 @@ import { Tables } from "@/types/supabase";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const EventDetailsHeader = ({ event }: { event: Tables<"events"> }) => {
+export const EventDetailsHeader = ({ event }: { event: Tables<"events"> }) => {
   const [active, setActive] = useState(event.active);
   const [loading, setLoading] = useState(false);
 
@@ -58,5 +58,3 @@ const EventDetailsHeader = ({ event }: { event: Tables<"events"> }) => {
     </header>
   );
 };
-
-export default EventDetailsHeader;

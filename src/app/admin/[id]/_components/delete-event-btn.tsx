@@ -17,7 +17,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { deleteEvent } from "@/server-actions/delete-event";
 
-const DeleteEventBtn = () => {
+export const DeleteEventBtn = () => {
   const params = useParams<{ id: string }>();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -70,5 +70,3 @@ const DeleteEventBtn = () => {
     </Dialog>
   );
 };
-
-export default DeleteEventBtn;

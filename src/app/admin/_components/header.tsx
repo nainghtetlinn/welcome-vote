@@ -18,7 +18,7 @@ import React, { useState } from "react";
 import { toast } from "sonner";
 import { logout } from "@/server-actions/logout";
 
-const Header = () => {
+export const Header = () => {
   const path = usePathname();
   const paths = path.split("/");
   paths.shift();
@@ -81,5 +81,3 @@ const Header = () => {
     </>
   );
 };
-
-export default Header;

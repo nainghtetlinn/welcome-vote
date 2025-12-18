@@ -1,7 +1,7 @@
-import CreateCandidateBtn from "@/components/create-candidate-btn";
-import EventDetailsHeader from "@/components/event-details-header";
-import Profile from "@/components/profile";
-import ResultChart from "@/components/result-chart";
+import { CreateCandidateBtn } from "./_components/create-candidate-btn";
+import { EventDetailsHeader } from "./_components/event-details-header";
+import { Profile } from "./_components/profile";
+import { ResultChart } from "./_components/result-chart";
 
 import { createClient } from "@/lib/supabase/server";
 import { Tables } from "@/types/supabase";

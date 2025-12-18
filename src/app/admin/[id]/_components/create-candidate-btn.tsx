@@ -34,7 +34,7 @@ import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const CreateCandidateBtn = () => {
+export const CreateCandidateBtn = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<string>();
@@ -217,5 +217,3 @@ const CreateCandidateBtn = () => {
     </Dialog>
   );
 };
-
-export default CreateCandidateBtn;

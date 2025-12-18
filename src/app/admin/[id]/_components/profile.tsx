@@ -18,7 +18,7 @@ import { Tables } from "@/types/supabase";
 import Image from "next/image";
 import { useState } from "react";
 
-const Profile = ({ candidate }: { candidate: Tables<"candidates"> }) => {
+export const Profile = ({ candidate }: { candidate: Tables<"candidates"> }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -70,5 +70,3 @@ const Profile = ({ candidate }: { candidate: Tables<"candidates"> }) => {
     </Dialog>
   );
 };
-
-export default Profile;

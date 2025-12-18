@@ -25,7 +25,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const CreateEventCard = () => {
+export const CreateEventCard = () => {
   const [loading, setLoading] = useState(false);
 
   const form = useForm<TEvent>({
@@ -83,5 +83,3 @@ const CreateEventCard = () => {
     </Card>
   );
 };
-
-export default CreateEventCard;
