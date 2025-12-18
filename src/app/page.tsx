@@ -12,6 +12,4 @@ export default async function Home() {
   if (event.error || !event.data) redirect("/error");
 
   redirect("/event/" + event.data.name);
-
-  return <div>Hello</div>;
 }
