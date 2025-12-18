@@ -36,11 +36,10 @@ export const createCandidate = async (
     .single();
 
   if (candidateResult.error) return createError(candidateResult.error);
-
   const photoResult = await supabase.storage
     .from("profile_pictures")
     .upload(
-      `${eventResult.data.name}/${candidateResult.data.id}_${data.name}`,
+      `${eventResult.data.name}/${data.name}_${candidateResult.data.id}_${data.photo.name}`,
       data.photo
     );
 
