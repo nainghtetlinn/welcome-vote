@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-// import DeleteCandidateBtn from './delete-candidate-btn'
+import { DeleteCandidateBtn } from "./delete-candidate-btn";
 
 import { Tables } from "@/types/supabase";
 import Image from "next/image";
@@ -64,7 +64,7 @@ export const Profile = ({ candidate }: { candidate: Tables<"candidates"> }) => {
           >
             Cancel
           </Button>
-          {/* <DeleteCandidateBtn id={candidate.id} /> */}
+          <DeleteCandidateBtn id={candidate.id} />
         </DialogFooter>
       </DialogContent>
     </Dialog>
