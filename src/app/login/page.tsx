@@ -19,8 +19,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Loader2, LogIn } from "lucide-react";
 
+import HCaptcha from "@hcaptcha/react-hcaptcha";
+import { useEffect, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -33,24 +34,37 @@ const Login = () => {
     defaultValues: { email: "", password: "" },
   });
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string>();
+  const captchaRef = useRef<HCaptcha>(null);
 
-  const onSubmit = async (data: TLogin) => {
+  const handleSubmit = form.handleSubmit(async (data) => {
+    if (!captchaToken) return;
+
     setLoading(true);
+    setSuccess(false);
 
-    const { success, message } = await login(data);
+    const { success, message } = await login(data, captchaToken);
     if (!success) {
       toast.error(message);
+    } else {
+      setSuccess(true);
     }
-
     setLoading(false);
-  };
+  });
+
+  useEffect(() => {
+    if (success) {
+      captchaRef.current?.resetCaptcha();
+    }
+  }, [success]);
 
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <Form {...form}>
         <form
           className="w-full max-w-100"
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={handleSubmit}
         >
           <Card>
             <CardHeader>
@@ -78,11 +92,18 @@ const Login = () => {
                   />
                 )}
               />
+              <HCaptcha
+                ref={captchaRef}
+                sitekey={process.env.NEXT_PUBLIC_SITEKEY!}
+                onVerify={(token) => {
+                  setCaptchaToken(token);
+                }}
+              />
             </CardContent>
             <CardFooter className="flex justify-end">
               <Button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !captchaToken}
               >
                 {loading ? <Loader2 className="animate-spin" /> : <LogIn />}
                 Login
