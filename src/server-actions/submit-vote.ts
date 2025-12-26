@@ -23,6 +23,9 @@ export const submitVote = async (
 
   const voter = userResult.data.user;
 
+  if (!voter.is_anonymous)
+    return createError("Admin cannot vote", "Admin cannot vote");
+
   /**
     check if voter have already voted
    */
@@ -47,8 +50,6 @@ export const submitVote = async (
     .in("id", votes)
     .eq("event_id", eventId);
   if (candidatesResult.error) return createError(candidatesResult.error);
-  console.log(candidatesResult.data);
-  console.log(votes.filter(onlyUnique));
   if (candidatesResult.data.length !== votes.filter(onlyUnique).length)
     return {
       success: false,

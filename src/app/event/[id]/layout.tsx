@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Header } from "./_components/header";
 import { Footer } from "./_components/footer";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
 export const generateMetadata = async ({
   params,
@@ -18,6 +20,24 @@ const EventLayout = async ({
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
+
+  const supabase = await createClient();
+
+  const user = await supabase.auth.getUser();
+
+  if (user.data.user?.id) {
+    const submitted = await supabase
+      .from("votes")
+      .select()
+      .eq("voter_id", user.data.user.id);
+    if (!submitted.error && submitted.data.length > 0) {
+      redirect("/success");
+    }
+  }
+
+  if (user.data.user && !user.data.user.is_anonymous) {
+    redirect("/admin");
+  }
 
   return (
     <>
