@@ -26,18 +26,18 @@ const CandidatesCarousel = ({
 }) => {
   return (
     <Carousel className="w-full">
-      <CarouselContent className="py-2">
+      <CarouselContent className="px-2">
         {candidates.map((c) => (
           <CarouselItem
             key={c.id}
-            className="basis-75"
+            className="basis-70"
           >
             <CandidateItem candidate={c} />
           </CarouselItem>
         ))}
       </CarouselContent>
       <CarouselPrevious className="left-2 bg-primary text-primary-foreground" />
-      <CarouselNext className="right-4 bg-primary text-primary-foreground" />
+      <CarouselNext className="right-2 bg-primary text-primary-foreground" />
     </Carousel>
   );
 };
@@ -59,7 +59,7 @@ const CandidateItem = ({ candidate }: { candidate: Tables<"candidates"> }) => {
           />
         </div>
       </CardContent>
-      <CardFooter className="gap-2">
+      <CardFooter className="gap-2 flex-col">
         <VoteBtn
           category={candidate.gender === "male" ? "king" : "queen"}
           candidate={candidate}
