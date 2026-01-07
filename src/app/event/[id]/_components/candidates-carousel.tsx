@@ -59,15 +59,8 @@ const CandidateItem = ({ candidate }: { candidate: Tables<"candidates"> }) => {
           />
         </div>
       </CardContent>
-      <CardFooter className="gap-2 flex-col">
-        <VoteBtn
-          category={candidate.gender === "male" ? "king" : "queen"}
-          candidate={candidate}
-        />
-        <VoteBtn
-          category={candidate.gender === "male" ? "prince" : "princess"}
-          candidate={candidate}
-        />
+      <CardFooter>
+        <VoteBtn candidate={candidate} />
       </CardFooter>
     </Card>
   );
