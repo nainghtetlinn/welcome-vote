@@ -54,7 +54,9 @@ const EventLayout = async ({
         }}
       />
       <Header id={id} />
-      <main className="relative container mx-auto max-w-5xl">{children}</main>
+      <main className="relative container mx-auto max-w-5xl pb-4">
+        {children}
+      </main>
       <Footer />
     </>
   );
