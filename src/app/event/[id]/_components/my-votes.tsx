@@ -53,7 +53,7 @@ const MyVote = ({
   if (!candidate)
     return (
       <Card className="aspect-square flex flex-col items-center justify-center">
-        <h5 className="font-bold text-xl">{category}</h5>
+        <h5 className="font-bold text-xl uppercase">{category}</h5>
       </Card>
     );
 
