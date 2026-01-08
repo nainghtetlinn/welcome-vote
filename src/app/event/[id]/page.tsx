@@ -17,7 +17,7 @@ const VotingPage = async ({ params }: { params: Promise<{ id: string }> }) => {
     .eq("active", true)
     .single();
 
-  if (event.error || !event.data) redirect("/error");
+  if (event.error || !event.data) redirect("/no-event");
 
   const { males, females } = filterCandidates(event.data.candidates);
 
