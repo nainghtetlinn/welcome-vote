@@ -1,6 +1,5 @@
-import ProfileImage from "@/assets/profile.png";
+import { Button } from "@/components/ui/button";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardFooter,
@@ -14,25 +13,29 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import VoteBtn from "./vote-btn";
 
 import { Tables } from "@/types/supabase";
 import Image from "next/image";
 
 const CandidatesCarousel = ({
   candidates,
+  handleVote,
 }: {
   candidates: Tables<"candidates">[];
+  handleVote: (c: Tables<"candidates">) => void;
 }) => {
   return (
-    <Carousel className="w-full">
-      <CarouselContent className="px-2">
+    <Carousel className="w-full overflow-hidden">
+      <CarouselContent>
         {candidates.map((c) => (
           <CarouselItem
             key={c.id}
             className="basis-70"
           >
-            <CandidateItem candidate={c} />
+            <CandidateItem
+              candidate={c}
+              handleVote={() => handleVote(c)}
+            />
           </CarouselItem>
         ))}
       </CarouselContent>
@@ -42,27 +45,38 @@ const CandidatesCarousel = ({
   );
 };
 
-const CandidateItem = ({ candidate }: { candidate: Tables<"candidates"> }) => {
+const CandidateItem = ({
+  candidate,
+  handleVote,
+}: {
+  candidate: Tables<"candidates">;
+  handleVote: () => void;
+}) => {
   return (
-    <Card>
-      <CardHeader className="select-none">
-        <CardTitle>{candidate.name}</CardTitle>
-        <CardDescription>{candidate.roll_no}</CardDescription>
-      </CardHeader>
-      <CardContent>
+    <div className="w-full space-y-2">
+      <CardContent className="px-2">
         <div className="w-full relative aspect-square rounded-md overflow-hidden">
           <Image
-            src={candidate.photo_url || ProfileImage}
+            src={candidate.photo_url || "/profile.png"}
             alt={candidate.name}
             fill
             className="object-cover"
           />
         </div>
       </CardContent>
-      <CardFooter>
-        <VoteBtn candidate={candidate} />
+      <CardHeader className="select-none px-2">
+        <CardTitle>{candidate.name}</CardTitle>
+        <CardDescription>{candidate.roll_no}</CardDescription>
+      </CardHeader>
+      <CardFooter className="px-2">
+        <Button
+          className="w-full"
+          onClick={handleVote}
+        >
+          Vote
+        </Button>
       </CardFooter>
-    </Card>
+    </div>
   );
 };
 

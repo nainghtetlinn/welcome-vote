@@ -1,12 +1,11 @@
-import CandidatesCarousel from "./_components/candidates-carousel";
-import MyVotes from "./_components/my-votes";
 import SubmitBtn from "./_components/submit-btn";
+import Vote from "./_components/vote";
 
 import { createClient } from "@/lib/supabase/server";
 import { filterCandidates } from "@/lib/utils";
 import { redirect } from "next/navigation";
 
-const Vote = async ({ params }: { params: Promise<{ id: string }> }) => {
+const VotingPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
 
   const supabase = await createClient();
@@ -24,22 +23,29 @@ const Vote = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <>
-      <section className="px-2 mb-4 space-y-2">
-        <h3 className="font-bold text-2xl pt-4">Your Votes</h3>
-        <MyVotes />
+      <section className="space-y-2 px-4 mt-4">
+        <Vote
+          category="king"
+          candidates={males}
+        />
+        <Vote
+          category="queen"
+          candidates={females}
+        />
+        <Vote
+          category="prince"
+          candidates={males}
+        />
+        <Vote
+          category="princess"
+          candidates={females}
+        />
         <div className="flex justify-end">
           <SubmitBtn eventId={event.data.id} />
         </div>
-      </section>
-
-      <section className="space-y-2">
-        <h3 className="font-bold text-2xl pl-2 pt-4">Queen / Princess</h3>
-        <CandidatesCarousel candidates={females} />
-        <h3 className="font-bold text-2xl pl-2 pt-4">King / Prince</h3>
-        <CandidatesCarousel candidates={males} />
       </section>
     </>
   );
 };
 
-export default Vote;
+export default VotingPage;
