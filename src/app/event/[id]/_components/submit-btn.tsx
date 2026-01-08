@@ -107,7 +107,7 @@ const SubmitBtn = ({ eventId }: { eventId: string }) => {
           <DialogTitle>Please confirm</DialogTitle>
         </DialogHeader>
 
-        <div>
+        <div className="w-full overflow-hidden">
           <HCaptcha
             ref={captchaRef}
             sitekey={process.env.NEXT_PUBLIC_SITEKEY!}
