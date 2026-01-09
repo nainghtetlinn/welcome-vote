@@ -9,7 +9,7 @@ export default async function Home() {
     .eq("active", true)
     .single();
 
-  if (event.error || !event.data) redirect("/error");
+  if (event.error || !event.data) redirect("/no-event");
 
   redirect("/event/" + event.data.name);
 }
