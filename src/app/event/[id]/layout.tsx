@@ -25,16 +25,6 @@ const EventLayout = async ({
 
   const user = await supabase.auth.getUser();
 
-  if (user.data.user?.id) {
-    const submitted = await supabase
-      .from("votes")
-      .select()
-      .eq("voter_id", user.data.user.id);
-    if (!submitted.error && submitted.data.length > 0) {
-      redirect("/success");
-    }
-  }
-
   if (user.data.user && !user.data.user.is_anonymous) {
     redirect("/admin");
   }
