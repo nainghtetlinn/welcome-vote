@@ -30,7 +30,8 @@ import { createCandidate } from "@/server-actions/create-candidate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
+import { useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -51,14 +52,22 @@ export const CreateCandidateBtn = () => {
     },
   });
 
-  const uploadImageToClient = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      const url = URL.createObjectURL(file);
-      setPreview(url);
-      form.setValue("photo", file);
-    }
+  const onDrop = (acceptedFiles: File[]) => {
+    const file = acceptedFiles[0];
+    if (!file) return;
+
+    const url = URL.createObjectURL(file);
+    setPreview(url);
+    form.setValue("photo", file, { shouldValidate: true });
   };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      "image/*": [],
+    },
+    maxFiles: 1,
+  });
 
   const onSubmit = async (data: TCandidate) => {
     setLoading(true);
@@ -108,27 +117,37 @@ export const CreateCandidateBtn = () => {
               <FormItem>
                 <FormLabel>Photo</FormLabel>
                 <FormControl>
-                  <Label
-                    htmlFor="photo"
-                    className="cursor-pointer"
+                  <div
+                    {...getRootProps()}
+                    className={`border-2 border-dashed rounded-lg w-50 h-50 cursor-pointer overflow-hidden flex items-center justify-center
+            ${isDragActive ? "border-primary bg-muted" : "border-border"}
+          `}
                   >
-                    <div className="border rounded-full overflow-hidden w-25 h-25">
+                    <input {...getInputProps()} />
+
+                    {preview ? (
                       <Image
-                        src={preview ?? ProfileImage}
+                        src={preview}
                         alt="Profile"
-                        width={100}
-                        height={100}
+                        width={200}
+                        height={200}
                         className="w-full h-full object-cover"
                       />
-                    </div>
-                    <Input
-                      id="photo"
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={uploadImageToClient}
-                    />
-                  </Label>
+                    ) : (
+                      <div className="text-center text-sm px-2 text-muted-foreground">
+                        <Image
+                          src={ProfileImage}
+                          alt="Placeholder"
+                          width={100}
+                          height={100}
+                          className="mx-auto mb-2 opacity-70"
+                        />
+                        {isDragActive
+                          ? "Drop image here"
+                          : "Drag & drop or click to upload"}
+                      </div>
+                    )}
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

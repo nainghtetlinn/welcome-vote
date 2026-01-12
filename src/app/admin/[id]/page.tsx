@@ -1,11 +1,12 @@
+import { filterCandidates } from "@/lib/utils";
 import { CreateCandidateBtn } from "./_components/create-candidate-btn";
 import { EventDetailsHeader } from "./_components/event-details-header";
-import { Profile } from "./_components/profile";
 import { ResultChart } from "./_components/result-chart";
 
 import { createClient } from "@/lib/supabase/server";
 import { Tables } from "@/types/supabase";
 import { redirect } from "next/navigation";
+import CandidatesCarousel from "./_components/candidates-carousel";
 
 const EventDetails = async ({
   params,
@@ -55,19 +56,25 @@ const EventDetails = async ({
     { king: [], queen: [], prince: [], princess: [] }
   );
 
+  const { males, females } = filterCandidates(candidateResults.data);
+
   return (
-    <div className="p-4">
+    <div className="p-4 space-y-8">
       <EventDetailsHeader event={eventResult.data} />
 
-      <h3 className="font-bold text-lg mb-4">Candidates</h3>
-      <section className="flex flex-wrap gap-2 mb-8">
-        {candidateResults.data.map((c) => (
-          <Profile
-            candidate={c}
-            key={c.id}
-          />
-        ))}
+      <section className="space-y-2">
+        <h4 className="font-bold text-lg">Create Candidate</h4>
         <CreateCandidateBtn />
+      </section>
+
+      <section className="space-y-2">
+        <h4 className="font-bold text-lg">Candidates (Males)</h4>
+        <CandidatesCarousel candidates={males} />
+      </section>
+
+      <section className="space-y-2">
+        <h4 className="font-bold text-lg">Candidates (Females)</h4>
+        <CandidatesCarousel candidates={females} />
       </section>
 
       <h3 className="font-bold text-lg mb-4">Result Chart</h3>
