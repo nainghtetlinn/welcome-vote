@@ -9,7 +9,8 @@ const NoEvent = () => {
           size={100}
           className="text-red-500"
         />
-        <h1 className="font-bold text-3xl">Opps! Voting time is ended.</h1>
+        <h1 className="font-bold text-3xl">Voting event has ended.</h1>
+        <p>Results will be announced soon. Thank you for participating.</p>
       </div>
     </div>
   );
